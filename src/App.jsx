@@ -1,5 +1,5 @@
 import './App.css';
-import { useState, useRef, useReducer } from 'react';
+import { useRef, useReducer, useCallback } from 'react';
 import Header from './components/Header';
 import Editor from './components/Editor';
 import List from './components/List';
@@ -45,7 +45,7 @@ function App() {
   const [todos, dispatch] = useReducer(reducer, mockData);
   const idRef = useRef(3);
 
-  const onCreate = (content) => {
+  const onCreate = useCallback((content) => {
     dispatch({
       type: 'CREATE',
       data: {
@@ -55,9 +55,9 @@ function App() {
         date: new Date().getTime(),
       },
     });
-  };
+  }, []);
 
-  const onUpdate = (targetId) => {
+  const onUpdate = useCallback((targetId) => {
     // todos State의 값들 중에
     // targetId의 일치하는 id를 갖는 todoItem의 isDone 변경
     // 인수: todos 배열에서 targetId와 일치하는 id를 갖는 요소의 데이터만 딱 바꾼 새로운 배열
@@ -65,15 +65,15 @@ function App() {
       type: 'UPDATE',
       targetId: targetId,
     });
-  };
+  }, []);
 
-  const onDelete = (targetId) => {
+  const onDelete = useCallback((targetId) => {
     // 인수 : todos 배열에서 targetId와 일치하는 id를 갖는 요소만 삭제된 새로운 배열
     dispatch({
       type: 'DELETE',
       targetId: targetId,
     });
-  };
+  }, []);
 
   return (
     <div className="App">
